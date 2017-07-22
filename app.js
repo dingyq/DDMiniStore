@@ -1,5 +1,5 @@
 var config = require('config.js')
-var http = require('./utils/httpHelper.js')
+var http = require('./modules/base/network.js')
 var util = require('./utils/util.js')
 //app.js
 App({

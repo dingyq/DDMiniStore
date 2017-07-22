@@ -1,6 +1,6 @@
 //index.js
 var config = require('../../config.js')
-var http = require('../../utils/httpHelper.js')
+var http = require('../../modules/base/network')
 var sta = require("../../utils/statistics.js");
 //获取应用实例
 var app = getApp()

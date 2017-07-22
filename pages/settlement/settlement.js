@@ -1,6 +1,6 @@
 //logs.js
 var config = require('../../config.js')
-var http = require('../..//utils/httpHelper.js')
+var http = require('../../modules/base/network.js')
 var util = require('../../utils/util.js')
 var sta = require("../../utils/statistics.js");
 //获取应用实例

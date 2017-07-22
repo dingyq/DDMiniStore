@@ -1,134 +1,191 @@
-var config = require('../../config.js')
-var http = require('../../utils/httpHelper.js')
+
+const config = require('../../config')
+const network = require('../../modules/base/network')
+const mallservice = require('../../modules/mall/mallservice.js')
+
 //index.js
 //获取应用实例
-var app = getApp()
-var sta = require("../../utils/statistics.js");
+const app = getApp()
+const sta = require("../../utils/statistics.js");
+
 Page({
   data: {
-    indicatorDots: false,//是否显示面板指示点
-    autoplay: false,  //是否自动切换
-    current:0,      //当前所在index
-    interval: 0, //自动切换时间
-    duration: 200,  //滑动时间
-    clas:["action"]
-  },
-  onLoad:function(){
-    
-      var that = this;
-      app.getUserInfo(function(userInfo){
-          that.setData({userInfo:userInfo});
-          that.getGoodsType();
-      })
-       http.httpGet("?c=banner&a=getBanner",{
-        appid:config.APPID,
-      },function (res){
-        console.log(res);
-          that.setData({
-            bander:res.data
-          });
-      });
-        //获取商品列表
-      that.getGoodsList("",'1,2',function(list){
-          that.setData({
-            IndexList:list
-          });
-      })
-  },
-  onShow:function(){
-  
-        sta();
-        app.getAppInfo(
-          function (appInfo){
-                wx.setNavigationBarTitle({
-                  title: appInfo.title
-                })
-            }
-        );
-        
-  },
-  getGoodsType:function(){
-        var that = this;
-        var data = {appid:config.APPID,userid:this.data.userInfo.id}
-        http.httpGet("?c=type&a=getTypeList" ,data,function(res){
-            if(res.code == '200' && res.msg == 'success'){
-                var list = res.data.list;
-                var goodsData = [{type:0,title:"全部"}];
-                for(var i=1;i<list.length+1;i++){
-                    goodsData[i]= {type:list[i-1].id,title:list[i-1].typename};
-                }
-                that.setData({goodsData:goodsData});
-                that.loadTabGoodsList(0);
-                
-            }
-        });
-  },
-  getGoodsList:function(type,status,callback){
-        var that = this;
-        var data = {appid:config.APPID,typeid:type,status:status}
-        if(status != '' || status != 0){
-            //data.status = status;
+    hidden:false,
+    curNav:1,
+    curIndex:0,
+    cart:[],
+    cartTotal:0,
+    navList:[
+      {
+        id:1,
+        name:'热销菜品'
+      },
+      {
+        id:2,
+        name:'热菜'
+      },
+      {
+        id:3,
+        name:'凉菜'
+      },
+      {
+        id:4,
+        name:'套餐'
+      }
+    ],
+    dishesList:[
+      [
+        {
+          name:"红烧肉",
+          price:38,
+          num:1,
+          id:1
+        },
+        {
+          name:"宫保鸡丁",
+          price:58,
+          num:1,
+          id:29
+        },
+        {
+          name:"水煮鱼",
+          price:88,
+          num:1,
+          id:2
         }
-        http.httpGet("?c=goods&a=getGoodsList" ,data,function(res){
-                if(res.code == '200' && res.msg == 'success'){
-                    var list = res.data.list;
-                    typeof callback == "function" && callback(list)
-                }
-        });
-  },
-  loadTabGoodsList:function(index){
-        var that = this;
-        var goodsData = that.data.goodsData;
-        if(goodsData[index].banner == undefined || goodsData[index].list ==undefined){
-              var type = goodsData[index].type; 
-              //获取推荐商品
-              this.getGoodsList(type,'2',function(list){
-                    var goods = that.data.goodsData;
-                    goods[index].banner = list;
-                    that.setData({goodsData:goods});
-              })
-               //获取商品列表
-              this.getGoodsList(type,'1,2',function(list){
-                    var goods = that.data.goodsData;
-                    goods[index].list = list;
-                    that.setData({goodsData:goods});
-              })
+      ],
+      [
+        {
+          name:"小炒日本豆腐",
+          price:18,
+          num:1,
+          id:3
+        },
+        {
+          name:"烤鱼",
+          price:58,
+          num:1,
+          id:4
         }
-        
+      ],
+      [
+        {
+          name:"大拌菜",
+          price:18,
+          num:1,
+          id:5
+        },
+        {
+          name:"川北凉粉",
+          price:8,
+          num:1,
+          id:6
+        }
+      ],
+      []
+    ],
+    dishes:[]
   },
-  //事件处理函数
-  switchs: function(e) {
-    var index = e.detail.current;
-    this.loadTabGoodsList(index);
-    this.setData({clas:[]});
 
-    var data = [];
-    data[index] = "action";
-    this.setData({clas:data });
+  onLoad: function(options) {
+    this.loadingChange()
+
+    // let that = this;
+    // mallservice.getGoodsList().then((res) => {
+    //   if (res.code === 0) {
+    //     // that.setData({
+    //     //   searchHistoryList: res.data,
+    //     // });
+    //   }
+    // });
   },
-  xun:function (e){
-      var index = e.target.dataset.index;
-      this.setData({current:index });
-      //this.loadTabGoodsList(index);
+
+  onReady: function() {
+    let that = this;
+    // searchService.getHotStock().then((res) => {
+    //   that.setData({
+    //     searchHotList: res,
+    //   });
+    // });
   },
-  todetail:function(e){
-        var id = e.currentTarget.id;
-        wx.navigateTo({
-          url: '../detail/index?id='+id,
-          success: function(res){
-            // success
-          },
-          fail: function() {
-            // fail
-          },
-          complete: function() {
-            // complete
-          }
-        })
+
+  onShow: function() {
+    // let that = this;
+    // searchService.getSearchHistory().then((res) => {
+    //   if (res.code === 0) {
+    //     that.setData({
+    //       searchHistoryList: res.data,
+    //     });
+    //   }
+    // });
+
+    // if (that.data.displayRV) {
+    //   let tmpResult = that.data.searchResultList;
+    //   that.setData({
+    //     searchResultList: searchService.updateSearchResult(tmpResult)
+    //   });
+    // }
   },
-  //处理分页
-  bindlower:function(e){
-    console.log(e)
+
+  onHide: function() {
+
+  },
+
+  onUnload: function() {
+
+  },
+
+
+  loadingChange: function() {
+    setTimeout(() => {
+      this.setData({
+        hidden:true
+      })
+    },2000)
+  },
+  selectNav: function(event) {
+    let id = event.target.dataset.id,
+      index = parseInt(event.target.dataset.index);
+      self = this;
+    this.setData({
+      curNav:id,
+      curIndex:index
+    })
+  },
+
+  // 选择菜品
+  selectDish: function(event) {
+    let dish = event.currentTarget.dataset.dish;
+    let flag = true;
+    let cart = this.data.cart;
+    
+    if(cart.length > 0){
+      cart.forEach(function(item,index){
+        if(item == dish){
+          cart.splice(index,1);
+          flag = false;
+        }
+      })
+    }
+    if(flag) cart.push(dish);
+    this.setData({
+      cartTotal:cart.length
+    })
+    this.setStatus(dish)
+  },
+
+  setStatus: function(dishId) {
+    let dishes = this.data.dishesList;
+    for (let dish of dishes){
+      dish.forEach((item) => {
+        if(item.id == dishId){
+          item.status = !item.status || false
+        }
+      })
+    }
+    
+    this.setData({
+      dishesList:this.data.dishesList
+    })
   }
-  
 })

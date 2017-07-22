@@ -1,20 +1,20 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/detail/index",
-    "pages/shoppingcar/index",
-    "pages/user/index",
-    "pages/address/index",
-    "pages/address/addto/index",
-    "pages/settlement/index",
-    "pages/order/index",
-    "pages/userdata/index",
+    "pages/detail/detail",
+    "pages/shopcar/shopcar",
+    "pages/user/user",
+    "pages/address/address",
+    "pages/address/addto/addto",
+    "pages/settlement/settlement",
+    "pages/order/order",
+    "pages/userdata/userdata",
     "pages/logs/logs"
   ],
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#F5B223",
-    "navigationBarTitleText": "家具时尚",
+    "navigationBarTitleText": "MiniStore",
     "navigationBarTextStyle":"#fff"
   },
   "tabBar": {
