@@ -52,11 +52,11 @@ Page({
     //return false;
   },
   addrss:function (e){
-        wx.navigateTo({url:"/pages/address/addto/index?id="})
+        wx.navigateTo({url:"/pages/address/addto/addto?id="})
   },
   addto:function (e){
         var id = e.currentTarget.dataset.id;
         console.log(id);
-        wx.navigateTo({url:"/pages/address/addto/index?id="+id})
+        wx.navigateTo({url:"/pages/address/addto/addto?id="+id})
   }
 })

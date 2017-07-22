@@ -18,15 +18,15 @@ Page({
     })
   },
   userdata:function (){
-      wx.navigateTo({url: "/pages/userdata/index"})
+      wx.navigateTo({url: "/pages/userdata/userdata"})
   },
   address: function (){
-      wx.navigateTo({url:"/pages/address/index"});
+      wx.navigateTo({url:"/pages/address/address"});
   },
   
   order:function (){
     //订单
-    wx.navigateTo({url: "/pages/order/index"})
+    wx.navigateTo({url: "/pages/order/order"})
   },
   keep:function () {
     //收藏
