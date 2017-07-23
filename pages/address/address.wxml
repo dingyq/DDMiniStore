@@ -10,7 +10,7 @@
         </view>
     </radio-group>
     <view class="item addto" bindtap="addrss">
-        <image src="../../images/add.png"/>
+        <image src="../../images/address_add.png"/>
         <text class="lable">添加新地址</text>
         <text class="jump">〉</text>
     </view>

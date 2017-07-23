@@ -1,6 +1,6 @@
 let network = {};
 // region 成员变量
-let Promise = require('./promise');
+let Promise = require('./promise.js');
 let MyError = require('./MyError');
 let extend = require('./extend');
 
@@ -61,22 +61,23 @@ network.doRequest = function(options) {
             reject(new MyError('网络错误，请稍后再试')); // new Error返回的是Object{line:508, column: 29}, 所以用new MyError()
         };
         //http头
-        let accountInfo = require('./AccountInfo');
+        // let accountInfo = require('./AccountInfo');
         if(!options.notWebSig){
             options.header=extend(options.header,{
                 'X-Futu-Client-Type': '38',
                 'X-Futu-Client-Version': getApp().getBuildVersion().toString(),
                 'X-Futu-Client-Lang': 'sc'
             });
-            if ( !options.header.hasOwnProperty('X-Futu-WebSig') ){
-                options.header['X-Futu-WebSig'] = accountInfo.getWebSig();
-            }
-            if ( !options.header.hasOwnProperty('X-Futu-Uid') ){
-                options.header['X-Futu-Uid'] = accountInfo.getUid().toString();
-            }
+            // if ( !options.header.hasOwnProperty('X-Futu-WebSig') ){
+            //     options.header['X-Futu-WebSig'] = accountInfo.getWebSig();
+            // }
+            // if ( !options.header.hasOwnProperty('X-Futu-Uid') ){
+            //     options.header['X-Futu-Uid'] = accountInfo.getUid().toString();
+            // }
         }
         // 发起请求
-        wx.request(options);
+        // wx.request(options);
+        resolve({test: 'test'})
     });
 };
 
@@ -88,68 +89,84 @@ network.doFormRequest=function(options){
     return this.doRequest(options);
 }
 
+
+
+
+
 // endregion
 
-// module.exports = network;
+network.httpGet = function () {
+
+}
+
+network.httpPost = function () {
+
+}
+
+network.httpUpload = function () {
+
+}
+
+module.exports = network;
 
 // var config = require('../config.js')
-var config = require('../../config.js')
-function Get (url, data, cb ){
-	// wx.showNavigationBarLoading();
-	// wx.request({
- //        method:'GET',
-	// 	url: config.HTTP_BASE_URL + url,
-	// 	data: data,
-	// 	success: (res) => {
-	// 		typeof cb == "function" && cb(res.data,"");
-	// 		wx.hideNavigationBarLoading();
-	// 	},
-	// 	fail:(err) => {
-	// 		typeof cb == "function" && cb(null,err.errMsg);
-	// 		wx.hideNavigationBarLoading();
-	// 	}
-	// });
-};
+// var config = require('../../config.js')
+// function Get (url, data, cb ){
+// 	// wx.showNavigationBarLoading();
+// 	// wx.request({
+//  //        method:'GET',
+// 	// 	url: config.HTTP_BASE_URL + url,
+// 	// 	data: data,
+// 	// 	success: (res) => {
+// 	// 		typeof cb == "function" && cb(res.data,"");
+// 	// 		wx.hideNavigationBarLoading();
+// 	// 	},
+// 	// 	fail:(err) => {
+// 	// 		typeof cb == "function" && cb(null,err.errMsg);
+// 	// 		wx.hideNavigationBarLoading();
+// 	// 	}
+// 	// });
+// };
 
-function Post (url,data, cb ){
-	// wx.request({
- //        method:'POST',
-	// 	url:  config.HTTP_BASE_URL + url,
-	// 	data: data,
-	// 	success: (res) => {
-	// 		typeof cb == "function" && cb(res.data,"");
-	// 	},
-	// 	fail:(err) => {
-	// 		typeof cb == "function" && cb(null,err.errMsg);
-	// 		console.log("http请求:"+config.HTTP_url);
-	// 		console.log(err)
-	// 	}
-	// });
-};
+// function Post (url,data, cb ){
+// 	// wx.request({
+//  //        method:'POST',
+// 	// 	url:  config.HTTP_BASE_URL + url,
+// 	// 	data: data,
+// 	// 	success: (res) => {
+// 	// 		typeof cb == "function" && cb(res.data,"");
+// 	// 	},
+// 	// 	fail:(err) => {
+// 	// 		typeof cb == "function" && cb(null,err.errMsg);
+// 	// 		console.log("http请求:"+config.HTTP_url);
+// 	// 		console.log(err)
+// 	// 	}
+// 	// });
+// };
 
-function Upload (url ,file ,data, cb ){
-	// wx.uploadFile({
-	// 	url:  config.HTTP_BASE_URL + url,
-	// 	filePath: file,
-	// 	name:"file",
-	// 	formData:data,
-	// 	success: (res) => {
-	// 		if( typeof(res.data)=="string"  ){
-	// 			typeof cb == "function" && cb( JSON.parse(res.data),"");
-	// 		}else{
-	// 			typeof cb == "function" && cb(res.data,"");	
-	// 		}
+// function Upload (url ,file ,data, cb ){
+// 	// wx.uploadFile({
+// 	// 	url:  config.HTTP_BASE_URL + url,
+// 	// 	filePath: file,
+// 	// 	name:"file",
+// 	// 	formData:data,
+// 	// 	success: (res) => {
+// 	// 		if( typeof(res.data)=="string"  ){
+// 	// 			typeof cb == "function" && cb( JSON.parse(res.data),"");
+// 	// 		}else{
+// 	// 			typeof cb == "function" && cb(res.data,"");	
+// 	// 		}
 			
-	// 	},
-	// 	fail:(err) => {
-	// 		typeof cb == "function" && cb(null,err.errMsg);
-	// 	}
-	// });
-};
+// 	// 	},
+// 	// 	fail:(err) => {
+// 	// 		typeof cb == "function" && cb(null,err.errMsg);
+// 	// 	}
+// 	// });
+// };
 
 
-module.exports ={
-    httpGet:Get,
-    httpPost:Post,
-	httpUpload:Upload
-};
+// module.exports ={
+//     httpGet:Get,
+//     httpPost:Post,
+// 	httpUpload:Upload
+// };

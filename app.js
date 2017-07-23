@@ -56,8 +56,41 @@ App({
         });
     }
   },
-  globalData:{
-    userInfo:null,
-    appInfo:null,
-  }
+
+    /**
+     * 是否是开发版本
+     * @return {boolean} true：开发版本。false：发布版本
+     */
+    isDebugVersion: function() {
+        let ver = this.globalData.version;
+        return +(ver.split('.')[2]) % 2 === 1;
+    },
+
+    /**
+     * 获取版本号
+     * @return {string}
+     */
+    getVersion: function() {
+        return this.globalData.version;
+    },
+
+    /**
+     * 获取build号
+     * @return {number}
+     */
+    getBuildVersion: function() {
+        let ver = this.globalData.version;
+        return +(ver.split('.')[2]);
+    },
+
+    getDeviceId: function () {
+        return this.globalData.deviceId;
+    },
+
+    globalData: {
+        userInfo:null,
+        appInfo:null,
+        deviceId: '',
+        version: '1.0.1' // 大版本号.小版本号.build号。build为奇数表示开发版本，为偶数为发布版本。后台判断版本号用build好，这样控制能力更好
+    }
 })

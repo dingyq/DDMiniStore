@@ -134,7 +134,7 @@ scroll-view{
 
 .wuge{
   text-align: center;
-  font-size: 18px;
+  font-size: 30rpx;
   color:#666;
   margin-top: 50rpx;
 }

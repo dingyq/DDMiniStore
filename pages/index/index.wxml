@@ -1,20 +1,34 @@
 <view class="container flex-wrap flex-direction-row">
       <!-- left aside -->
       <view class="aside flex-wrap flex-direction-col">
-            <block wx:for="{{navList}}" wx:key="{{item.id}}">
-                  <text class="type-nav {{curNav == item.id ? 'selected' : ''}}" bindtap="selectNav" data-index="{{index}}" data-id="{{item.id}}">{{item.name}}</text>
+            <block wx:for="{{goodsInfoList}}" wx:key="{{item.categoryId}}">
+                  <text class="type-nav {{curCategoryId == item.categoryId ? 'selected' : ''}}" bindtap="selectCategory" data-id="{{item.categoryId}}">{{item.categoryName}}</text>
             </block>
       </view>
 
       <!-- content -->
       <view class="content flex-item">
-            <block wx:for="{{dishesList[curIndex]}}" wx:key="{{item.id}}">
-                  <view class="dish flex-wrap flex-direction-row" catchtap="selectDish" data-dish="{{item.id}}">
+            <block wx:for="{{goodsList}}" wx:key="{{item.goodsId}}">
+                  <view class="dish flex-wrap flex-direction-row" data-id="{{item.goodsId}}">
                         <view class="flex-item">
-                              <text class="title">{{item.name}}</text>
-                              <p>￥{{item.price}}</p>
+                              <text class="title">{{item.goodsName}}</text>
+                              <p>￥{{item.discountPrice}}</p>
                         </view>
-                        <view class="add-btn"><icon type="{{item.status ? 'success' : 'circle'}}" color="orange" size="30"></icon></view>
+                        <view class="operate-area">
+                              <block wx:for="{{cart.list}}" wx:for-index="id" wx:for-item="num" wx:key="{{id}}">
+                                    <block wx:if="{{id == item.goodsId}}">
+                                          <view class="operate-btn" catchtap="bindGoodsMinus" data-id="{{id}}">
+                                               <image class="minus-btn" src="../../images/goods_minus.png"/>
+                                          </view>
+                                          <view class="count-input-container">
+                                                <input class="count-input" placeholder="" type="{{type}}" disabled="{{false}}" focus="{{false}}" maxlength="{{3}}" value="{{num}}" bindchange="{{bindInputChange}}" bindinput="{{bindInputing}}" bindfocus="{{bindInputFocus}}" bindblur="{{bindInputBlur}}"/>  
+                                          </view>
+                                    </block>
+                              </block>
+                              <view class="operate-btn" catchtap="bindGoodsAdd" data-id="{{item.goodsId}}">
+                                   <image class="add-btn" src="../../images/goods_add.png"/>
+                              </view>
+                        </view>
                   </view>
             </block>
 

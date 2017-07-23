@@ -1,6 +1,8 @@
 //logs.js
 var util = require('../../utils/util.js')
 var sta = require("../../utils/statistics.js");
+const DDUserInfo = require('../../modules/base/DDUserInfo.js');
+
 Page({
   data: {
     allGoods:{},
@@ -24,18 +26,18 @@ Page({
   },
   showAllGoods:function (){
 
-    var allGoods =  wx.getStorageSync('shoppingcar');
+    var allGoods =  DDUserInfo.getShoppingCar().list;
     var sumPrice = 0;
     for(var i=0;i< allGoods.length;i++){
-        var price = allGoods[i].price;
-        var count =  allGoods[i].buycount;
-        price = util.accMul(price,count);
-        sumPrice = util.accAdd(sumPrice,price);
+        var price = allGoods[i].goodsId;
+        var count =  allGoods[i].count;
+        // price = util.accMul(price,count);
+        // sumPrice = util.accAdd(sumPrice,price);
     }
 
     this.setData({
       allGoods:allGoods,
-      sumPrice:sumPrice
+      // sumPrice:sumPrice
     });
   },
   toDetail:function(e){

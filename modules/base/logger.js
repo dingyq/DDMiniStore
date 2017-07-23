@@ -21,7 +21,7 @@ let network = require('./network.js');
  * 如果是release版本，则不打控制台，只上传notice、warning、error基本的日志。debug和info不上传
  * @type {boolean}
  */
-let isDebug = false;
+let isDebug = true;
 
 /**
  * 日志初始化
@@ -49,10 +49,10 @@ let Logger = function (options) {
  * @return {Undefined}
  */
 Logger.prototype.log = function (level, message, moduleName, action) {
-    // if (isDebug) {
-    //     console.log(`uid: ${this.uid} [${level}] , ${moduleName}, ${action} `, message);
-    // }
-    // else {
+    if (isDebug) {
+        // console.log(`[${level}] , ${moduleName}, ${action} `, message);
+        console.log(`uid: ${this.uid} [${level}] , ${moduleName}, ${action} `, message);
+    } else {
     //     let uploadMessage = `module: ${moduleName}, action: ${action}, message: ${JSON.stringify(message)}`;
     //     switch (level) {
     //         case 'notice':
@@ -70,7 +70,7 @@ Logger.prototype.log = function (level, message, moduleName, action) {
     //             })
     //             break;
     //     }
-    // }
+    }
 };
 
 // 日志级别

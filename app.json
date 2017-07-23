@@ -13,30 +13,30 @@
   ],
   "window":{
     "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#F5B223",
+    "navigationBarBackgroundColor": "#FF0000",
     "navigationBarTitleText": "MiniStore",
     "navigationBarTextStyle":"#fff"
   },
   "tabBar": {
-    "selectedColor": "#F5B223",
+    "selectedColor": "#FF0000",
     "color": "#9A9A9A",
     "list": [{
       "pagePath": "pages/index/index",
-      "text": "店铺",
-      "iconPath": "images/dianpu.png",
-      "selectedIconPath": "images/dianpu_s.png"
+      "text": "分类",
+      "iconPath": "images/category_nor.png",
+      "selectedIconPath": "images/category_sel.png"
     },
     {
       "pagePath": "pages/shopcar/shopcar",
       "text": "购物车",
-      "iconPath": "images/gouwuche.png",
-      "selectedIconPath": "images/gouwuche_s.png"
+      "iconPath": "images/shop_cart_nor.png",
+      "selectedIconPath": "images/shop_cart_sel.png"
     },
     {
       "pagePath": "pages/user/user",
       "text": "我",
-       "iconPath": "images/user.png",
-      "selectedIconPath": "images/user_s.png"
+       "iconPath": "images/mine_nor.png",
+      "selectedIconPath": "images/mine_sel.png"
     }]
   },
   "debug": true,

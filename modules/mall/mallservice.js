@@ -1,5 +1,6 @@
 const TAG = "MallService";
 const network = require('../base/network.js');
+const ProtocolUrl = require('../base/ProtocolUrl.js');
 const Promise = require('../base/promise.js');
 const MyError = require('../base//MyError.js');
 const DDLog = require('../base/DDLog.js');
@@ -8,10 +9,10 @@ let mallservice = {};
 
 let doRequest = (options) => {
 	options.isFail = function(data) {
+		DDLog.e(TAG, "doRequest()", "e: ", data.error);
 		if (!data.error) {
 			return false;
 		}
-		// FtLog.e(TAG, "doRequest()", "e: ", data.error);
 		return true;
 	};
 	options.getError = (data) => {
@@ -23,37 +24,89 @@ let doRequest = (options) => {
 
 mallservice.getGoodsList = function() {
 	return doRequest({
-		url: protocolUrl.HotStock,
+		url: ProtocolUrl.GoodsList,
 		method: 'GET',
 		data: {
 			_: Date.now()
 		}
 	}).then((res) => {
-		let result = [];
-		for (var i = 0; i < res.data.length; i++) {
-			var oriObj = res.data[i];
-			// TODO: 协议有问题，没有区分sz,sh;
-			let marketType = MarketType.SZ.value;
-			let marketStr = oriObj.market;
-			if (marketStr === "HK" || marketStr === "hk") {
-				marketType = MarketType.HK.value;
-			} else if (marketStr === "US" || marketStr === "us") {
-				marketType = MarketType.US.value;
-			} else if (marketStr === "SH" || marketStr === "sh") {
-				marketType = MarketType.SH.value;
+		res = {
+			"category":[
+			{
+				"categoryId":1, 	// 类别id
+				"categoryName":"休闲零食"	,// 类品名称
+			},
+			{
+				"categoryId":2,
+				"categoryName":"日用品",
+			}],
+			"goods":[
+			{
+				"goodsId":1,	// 商品id
+				"goodsName":"益达",	// 名字
+				"categoryId":1,
+				"categoryName":"食物",
+				"picUrl":"https://www.baidu.com",	// 原图
+				"thumbPicUrl":"https://www.baidu.com", // 缩略图
+				"hasDiscount":1, // 是否有折扣
+				"originPrice":12,	// 原价
+				"discount":0.5,	// 折扣
+				"discountPrice":6,	// 折后价
+				"sales":100, 	// 销量
+				"universalRank":123, // 综合排名
+			},
+			{
+				"goodsId":2,	// 商品id
+				"goodsName":"巧克力",	// 名字
+				"categoryId":2,
+				"categoryName":"食物",
+				"picUrl":"https://www.baidu.com",	// 原图
+				"thumbPicUrl":"https://www.baidu.com", // 缩略图
+				"hasDiscount":1, // 是否有折扣
+				"originPrice":12,	// 原价
+				"discount":0.5,	// 折扣
+				"discountPrice":6,	// 折后价
+				"sales":100, 	// 销量
+				"universalRank":123, // 综合排名
+			},
+			{
+				"goodsId":3,	// 商品id
+				"goodsName":"巧克力",	// 名字
+				"categoryId":2,
+				"categoryName":"食物",
+				"picUrl":"https://www.baidu.com",	// 原图
+				"thumbPicUrl":"https://www.baidu.com", // 缩略图
+				"hasDiscount":1, // 是否有折扣
+				"originPrice":12,	// 原价
+				"discount":0.5,	// 折扣
+				"discountPrice":6,	// 折后价
+				"sales":100, 	// 销量
+				"universalRank":123, // 综合排名
 			}
-			let stockObj = {
-				stockId: oriObj.stock_id,
-				stockName: oriObj.stock_name,
-				stockCode: oriObj.stock_code,
-				market: marketType,
-				marketSymbol: getMarketSymbol(marketType),
-			};
-			result.push(stockObj);
+			]
 		}
-		return result;
+		console.log('res is '+ res)
+		let result = [];
+		let categoryList = res.category;
+		let goodsList = res.goods;
+		for (let i = 0; i < categoryList.length; i++) {
+			let category = categoryList[i];
+			let tmpGoodsList = [];
+			for (let j = 0; j < goodsList.length; j++) {
+				let good = goodsList[j]
+				if (good.categoryId == category.categoryId) {
+					tmpGoodsList.push(goodsList[j])
+				}
+			}
+			category.goodsList = tmpGoodsList;
+			result.push(category);
+		}
+		return {
+			code: 0,
+			data: result,
+		};
 	}).catch((e) => {
-		FtLog.e(TAG, "getHotStock()", "e: ", e);
+		DDLog.e(TAG, "getGoodsList()", "e: ", e);
 	});
 
 }

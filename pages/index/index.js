@@ -1,8 +1,7 @@
-
-const config = require('../../config')
-const network = require('../../modules/base/network')
 const mallservice = require('../../modules/mall/mallservice.js')
-
+const DDLog = require('../../modules/base/DDLog.js');
+const DDUserInfo = require('../../modules/base/DDUserInfo.js');
+let extend = require('../../modules/base/extend');
 //index.js
 //获取应用实例
 const app = getApp()
@@ -10,125 +9,43 @@ const sta = require("../../utils/statistics.js");
 
 Page({
   data: {
-    hidden:false,
-    curNav:1,
-    curIndex:0,
-    cart:[],
-    cartTotal:0,
-    navList:[
-      {
-        id:1,
-        name:'热销菜品'
-      },
-      {
-        id:2,
-        name:'热菜'
-      },
-      {
-        id:3,
-        name:'凉菜'
-      },
-      {
-        id:4,
-        name:'套餐'
-      }
-    ],
-    dishesList:[
-      [
-        {
-          name:"红烧肉",
-          price:38,
-          num:1,
-          id:1
-        },
-        {
-          name:"宫保鸡丁",
-          price:58,
-          num:1,
-          id:29
-        },
-        {
-          name:"水煮鱼",
-          price:88,
-          num:1,
-          id:2
-        }
-      ],
-      [
-        {
-          name:"小炒日本豆腐",
-          price:18,
-          num:1,
-          id:3
-        },
-        {
-          name:"烤鱼",
-          price:58,
-          num:1,
-          id:4
-        }
-      ],
-      [
-        {
-          name:"大拌菜",
-          price:18,
-          num:1,
-          id:5
-        },
-        {
-          name:"川北凉粉",
-          price:8,
-          num:1,
-          id:6
-        }
-      ],
-      []
-    ],
-    dishes:[]
+    curCategoryId:1,
+    goodsInfoList:[],
+    cart: {
+      count: 0,
+      total: 0,
+      list: {}
+    },
   },
 
   onLoad: function(options) {
     this.loadingChange()
 
-    // let that = this;
-    // mallservice.getGoodsList().then((res) => {
-    //   if (res.code === 0) {
-    //     // that.setData({
-    //     //   searchHistoryList: res.data,
-    //     // });
-    //   }
-    // });
+    let that = this;
+    mallservice.getGoodsList().then((res) => {
+      if (res.code === 0) {
+        let category = res.data[0];
+
+        that.setData({
+          goodsInfoList: res.data,
+          curCategoryId: category.categoryId,
+          goodsList: category.goodsList,
+        });
+      }
+    });
   },
 
   onReady: function() {
-    let that = this;
-    // searchService.getHotStock().then((res) => {
-    //   that.setData({
-    //     searchHotList: res,
-    //   });
-    // });
+
   },
 
   onShow: function() {
-    // let that = this;
-    // searchService.getSearchHistory().then((res) => {
-    //   if (res.code === 0) {
-    //     that.setData({
-    //       searchHistoryList: res.data,
-    //     });
-    //   }
-    // });
 
-    // if (that.data.displayRV) {
-    //   let tmpResult = that.data.searchResultList;
-    //   that.setData({
-    //     searchResultList: searchService.updateSearchResult(tmpResult)
-    //   });
-    // }
   },
 
   onHide: function() {
-
+    let cart = this.data.cart;
+    DDUserInfo.updateShoppingCar(cart);
   },
 
   onUnload: function() {
@@ -143,49 +60,84 @@ Page({
       })
     },2000)
   },
-  selectNav: function(event) {
-    let id = event.target.dataset.id,
-      index = parseInt(event.target.dataset.index);
-      self = this;
+
+  selectCategory: function(event) {
+    const goodsInfoList = this.data.goodsInfoList;
+    let goodsList = [];
+    let id = event.target.dataset.id;
+    for (let i = 0; i < goodsInfoList.length; i++) {
+      let category = goodsInfoList[i];
+      if (category.categoryId == id) {
+          goodsList = category.goodsList;
+          break;
+      }
+    }
     this.setData({
-      curNav:id,
-      curIndex:index
+      curCategoryId:id,
+      goodsList: goodsList,
     })
   },
 
-  // 选择菜品
-  selectDish: function(event) {
-    let dish = event.currentTarget.dataset.dish;
-    let flag = true;
-    let cart = this.data.cart;
-    
-    if(cart.length > 0){
-      cart.forEach(function(item,index){
-        if(item == dish){
-          cart.splice(index,1);
-          flag = false;
+  getGoods:function(goodsId) {
+    const goodsInfoList = this.data.goodsInfoList;
+    for (let i = 0; i < goodsInfoList.length; i++) {
+      let category = goodsInfoList[i];
+      for (let j = 0; j < category.goodsList.length; j++) {
+        if (category.goodsList[j].goodsId == goodsId) {
+          return category.goodsList[j];
         }
-      })
+      }
     }
-    if(flag) cart.push(dish);
-    this.setData({
-      cartTotal:cart.length
-    })
-    this.setStatus(dish)
+    return null;
   },
 
-  setStatus: function(dishId) {
-    let dishes = this.data.dishesList;
-    for (let dish of dishes){
-      dish.forEach((item) => {
-        if(item.id == dishId){
-          item.status = !item.status || false
-        }
-      })
+  countCart: function () {
+    var count = 0, total = 0;
+    for (var id in this.data.cart.list) {
+      var goods = this.getGoods(id);
+      count += this.data.cart.list[id];
+      total += goods.discountPrice * this.data.cart.list[id];
     }
-    
+    this.data.cart.count = count;
+    this.data.cart.total = total;
     this.setData({
-      dishesList:this.data.dishesList
-    })
-  }
+      cart: this.data.cart
+    });
+  },
+
+  bindGoodsAdd: function(event) {
+    let goodsId = event.currentTarget.dataset.id;
+    var num = this.data.cart.list[goodsId] || 0;
+    this.data.cart.list[goodsId] = num + 1;
+    this.countCart();
+  },
+
+  bindGoodsMinus: function(event) {
+    let goodsId = event.currentTarget.dataset.id;
+    var num = this.data.cart.list[goodsId] || 0;
+    if (num <= 1) {
+      delete this.data.cart.list[goodsId];
+    } else {
+      this.data.cart.list[goodsId] = num - 1;
+    }
+    this.countCart();
+  },
+
+
+  bindInputChange: function(event) {
+
+  },
+
+  bindInputing: function(event) {
+
+  },
+
+  bindInputFocus: function(event) {
+
+  },
+
+  bindInputBlur: function(event) {
+
+  },
+
 })
