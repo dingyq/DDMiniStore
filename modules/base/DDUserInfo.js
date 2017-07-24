@@ -131,7 +131,7 @@ DDUserInfo.updateShoppingCar = function(shoppingcar) {
         for (let id in shoppingcar.list) {
             let obj = {
                 "goodsId": id,
-                "count": shoppingcar.list[obj]
+                "count": shoppingcar.list[id]
             }
             result.push(obj);
         }

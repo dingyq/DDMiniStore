@@ -5,7 +5,9 @@ const Promise = require('../base/promise.js');
 const MyError = require('../base//MyError.js');
 const DDLog = require('../base/DDLog.js');
 
-let mallservice = {};
+let mallservice = {
+	goodsList:[],
+};
 
 let doRequest = (options) => {
 	options.isFail = function(data) {
@@ -22,7 +24,18 @@ let doRequest = (options) => {
 	return network.doRequest(options);
 }
 
+mallservice.getGoods = function(goodsId) {
+	for (var i = 0; i < this.goodsList.length; i++) {
+		let goods = this.goodsList[i];
+		if (goods.goodsId = goodsId) {
+			return goods;
+		}
+	}
+	return null;
+}
+
 mallservice.getGoodsList = function() {
+	let that = this;
 	return doRequest({
 		url: ProtocolUrl.GoodsList,
 		method: 'GET',
@@ -47,7 +60,7 @@ mallservice.getGoodsList = function() {
 				"categoryId":1,
 				"categoryName":"食物",
 				"picUrl":"https://www.baidu.com",	// 原图
-				"thumbPicUrl":"https://www.baidu.com", // 缩略图
+				"thumbPicUrl":"https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png", // 缩略图
 				"hasDiscount":1, // 是否有折扣
 				"originPrice":12,	// 原价
 				"discount":0.5,	// 折扣
@@ -61,7 +74,7 @@ mallservice.getGoodsList = function() {
 				"categoryId":2,
 				"categoryName":"食物",
 				"picUrl":"https://www.baidu.com",	// 原图
-				"thumbPicUrl":"https://www.baidu.com", // 缩略图
+				"thumbPicUrl":"https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png", // 缩略图
 				"hasDiscount":1, // 是否有折扣
 				"originPrice":12,	// 原价
 				"discount":0.5,	// 折扣
@@ -75,7 +88,7 @@ mallservice.getGoodsList = function() {
 				"categoryId":2,
 				"categoryName":"食物",
 				"picUrl":"https://www.baidu.com",	// 原图
-				"thumbPicUrl":"https://www.baidu.com", // 缩略图
+				"thumbPicUrl":"https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png", // 缩略图
 				"hasDiscount":1, // 是否有折扣
 				"originPrice":12,	// 原价
 				"discount":0.5,	// 折扣
@@ -85,7 +98,6 @@ mallservice.getGoodsList = function() {
 			}
 			]
 		}
-		console.log('res is '+ res)
 		let result = [];
 		let categoryList = res.category;
 		let goodsList = res.goods;
@@ -101,6 +113,7 @@ mallservice.getGoodsList = function() {
 			category.goodsList = tmpGoodsList;
 			result.push(category);
 		}
+		that.goodsList = goodsList;
 		return {
 			code: 0,
 			data: result,

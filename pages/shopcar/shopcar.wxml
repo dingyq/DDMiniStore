@@ -4,13 +4,13 @@
           <view wx:for="{{allGoods}}" wx:key="item.goodsId"  class="list" >
                 <view class="item" >
                       <view class="image" bindtap="toDetail" data-id="{{item.goodsId}}">
-                          <image src="{{item.img}}"/>
+                          <image src="{{item.thumbPicUrl}}"/>
                       </view>
                       <view class="content">
-                          <text class="h1">{{item.goodsId}}</text>
+                          <text class="h1">{{item.goodsName}}</text>
                           <!--<text class="p">1个／不低于120斤</text>-->
                           <text class="p"></text>
-                          <text class="p myp">¥{{item.goodsId}}</text>
+                          <text class="p myp">¥{{item.discountPrice}}</text>
                       </view>
                       <view class="number">
                           <view class="plus" bindtap="jian" data-id="{{item.goodsId}}">-</view>
