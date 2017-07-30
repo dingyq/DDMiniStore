@@ -27,7 +27,7 @@ let doRequest = (options) => {
 mallservice.getGoods = function(goodsId) {
 	for (var i = 0; i < this.goodsList.length; i++) {
 		let goods = this.goodsList[i];
-		if (goods.goodsId = goodsId) {
+		if (goods.goodsId == goodsId) {
 			return goods;
 		}
 	}
@@ -60,7 +60,7 @@ mallservice.getGoodsList = function() {
 				"categoryId":1,
 				"categoryName":"食物",
 				"picUrl":"https://www.baidu.com",	// 原图
-				"thumbPicUrl":"https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png", // 缩略图
+				"thumbPicUrl":"http://pic.58pic.com/58pic/13/88/43/47m58PIC28t_1024.jpg", // 缩略图
 				"hasDiscount":1, // 是否有折扣
 				"originPrice":12,	// 原价
 				"discount":0.5,	// 折扣
@@ -70,11 +70,11 @@ mallservice.getGoodsList = function() {
 			},
 			{
 				"goodsId":2,	// 商品id
-				"goodsName":"巧克力",	// 名字
+				"goodsName":"苹果",	// 名字
 				"categoryId":2,
 				"categoryName":"食物",
 				"picUrl":"https://www.baidu.com",	// 原图
-				"thumbPicUrl":"https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png", // 缩略图
+				"thumbPicUrl":"http://pic33.nipic.com/20130928/8821914_220446979000_2.jpg", // 缩略图
 				"hasDiscount":1, // 是否有折扣
 				"originPrice":12,	// 原价
 				"discount":0.5,	// 折扣
@@ -88,7 +88,7 @@ mallservice.getGoodsList = function() {
 				"categoryId":2,
 				"categoryName":"食物",
 				"picUrl":"https://www.baidu.com",	// 原图
-				"thumbPicUrl":"https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png", // 缩略图
+				"thumbPicUrl":"http://pic.58pic.com/58pic/15/39/77/60V58PIC8sw_1024.jpg", // 缩略图
 				"hasDiscount":1, // 是否有折扣
 				"originPrice":12,	// 原价
 				"discount":0.5,	// 折扣

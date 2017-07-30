@@ -1,39 +1,52 @@
-
 scroll-view{
-  margin-bottom: 50px;
+  margin-bottom: 50rpx;
 }
+
 .list{
-  border-top:1px solid #eee;
-  margin-top:10px;
+  border-top:1rpx solid #eee;
+  margin-top:10rpx;
 }
+
 .list .item {
   background: #fff;
-  padding: 10px 15px;
-  height: 80px;
-  border-bottom: 1px solid #eee;
-  position: relative;
+  padding: 10rpx 15rpx;
+  height: 160rpx;
+  border-bottom: 1rpx solid #eee;
+  /*position: relative;*/
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .list .item .image {
-  width:90px;
-  height: 80px;
-  position: absolute;
-  left:15px;
-  top:10px;
+  width:150rpx;
+  height:140rpx;
+  margin-left:10rpx;
 }
+
 .list .item .image image{
   width:100%;
-  height: 100%;
+  height:100%;
 }
+
 .list .item .content {
-  padding-left:100px;
+  margin-left:10rpx;
+  /*background-color: #f00;*/
+  width: 280rpx;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }
+
 .list .item .content .h1{
   display: block;
   font-size: 30rpx;
   color:#666;
-  line-height: 40rpx;
-  margin-bottom: 15px;
+  margin-bottom: 30rpx;
   text-overflow: ellipsis;
   overflow: hidden;  
   white-space:nowrap; 
@@ -41,87 +54,87 @@ scroll-view{
 }
 .list .item .content .p{
   display: block;
-  font-size: 12px;
+  font-size: 24rpx;
   color:#999;
-  line-height: 25px;
 }
 .list .item .content .myp{
-  font-size:14px;
+  font-size:28rpx;
   color: #ff533b;
 }
 
-.dizhi{
+.operate-area {
+  width:160rpx;
+  height:80rpx;
   position: absolute;
-  right:30px;
-  bottom: 10px;
-  color: #ccc;
-  height: 30px;
-  line-height:30px;
-  width:60px;
-  text-align: right;
+  right:20rpx;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.number {
-  width:110px;
-  height: 50px;
-  position: absolute;
-  right:0;
-  top:30px;
+.btn-image{
+  width: 40rpx;
+  height: 40rpx;
 }
-.number:after{
-  content:"";
-  display: block;
-  clear: both;
+
+.operate-area .plus{
+  width:40rpx;
+  height:40rpx;
 }
-.number .plus{
-  width:30px;
-  height: 30px;
-  line-height: 28px;
-  text-align: center;
-  color:#fff;
-  background: #F5B223;
-  border-radius: 50%;
-  font-size: 20px;
-  float: left;
-  margin-top:10px;
-}
-.number .sum{
-  float: left;
-  margin-top: 5px;
-  width:40px;
-  line-height: 40px;
-  font-size: 14px;
+
+.operate-area .sum{
+  width: 54rpx;
+  height: 44rpx;
+  border: 1rpx solid #DCE2EA;
+  border-radius: 2rpx;
+  z-index: 1;
+
+  font-size: 28rpx;
   text-align: center;
 }
-.number .jiax{
-  margin-right:15px;
+
+.sum .count-input{
+  padding: 0 2rpx;
+  font-family: PingFang-SC-Regular;
+  font-size: 26rpx;
+  color: #000000;
+  letter-spacing: 0;
 }
+
+
 
 .footer{
     background-color: #fff;
-    border-top:1px solid #eee;
+    border-top:1rpx solid #eee;
     width: 100%;
     position: fixed;
     left: 0;
     bottom: 0;
     right: 0;
 }
+
 .footer .right{
   float: right;
 }
+
 .footer .left{
   float: left;
 }
+
 .footer .left {
   line-height: 40px;
   font-size: 14px;
   padding-left:15px;
   color:#666;
 }
+
 .footer .left .span {
   color:#ff533b;
   padding-left:5px;
 }
+
 .footer .right button{
   height: 40px;
   background: #F5B223;

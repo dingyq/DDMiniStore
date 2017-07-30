@@ -1,7 +1,7 @@
 <view>
       <scroll-view scroll-Y="true" scroll-X="false"> 
           <view class="wuge" wx:if="{{allGoods == '' || allGoods.length == 0}}">没有任何商品</view>
-          <view wx:for="{{allGoods}}" wx:key="item.goodsId"  class="list" >
+          <view wx:for="{{allGoods}}" wx:key="{{item.goodsId}}" class="list">
                 <view class="item" >
                       <view class="image" bindtap="toDetail" data-id="{{item.goodsId}}">
                           <image src="{{item.thumbPicUrl}}"/>
@@ -12,10 +12,16 @@
                           <text class="p"></text>
                           <text class="p myp">¥{{item.discountPrice}}</text>
                       </view>
-                      <view class="number">
-                          <view class="plus" bindtap="jian" data-id="{{item.goodsId}}">-</view>
-                          <view class="sum">{{item.count}}</view>
-                          <view class="plus" bindtap="jia" data-id="{{item.goodsId}}">+</view>
+                      <view class="operate-area">
+                          <view class="plus" catchtap="bindGoodsMinus" data-id="{{item.goodsId}}">
+                              <image class="btn-image" src="../../images/goods_minus.png"/>
+                          </view>
+                          <view class="sum">
+                              <input class="count-input" placeholder="" type="{{type}}" disabled="{{false}}" focus="{{false}}" maxlength="{{3}}" value="{{item.count}}" bindchange="{{bindInputChange}}" bindinput="{{bindInputing}}" bindfocus="{{bindInputFocus}}" bindblur="{{bindInputBlur}}"/>  
+                          </view>
+                          <view class="plus" catchtap="bindGoodsAdd" data-id="{{item.goodsId}}">
+                              <image class="btn-image" src="../../images/goods_add.png"/>
+                          </view>
                       </view>
                 </view>
           </view>

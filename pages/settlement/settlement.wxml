@@ -17,10 +17,10 @@
 <view class="box">
   <text class="title">订单清单</text>
   <view class="list">
-    <block wx:for="{{allGoods}}">
+    <block wx:for="{{allGoods}}" wx:key="{{item.goodsId}}">
       <view class="item">
-        <text class="left">{{item.name}}(x{{item.buycount}})</text>
-        <text class="right">¥{{item.pay}}</text>
+        <text class="left">{{item.goodsName}}(x{{item.count}})</text>
+        <text class="right">¥{{item.discountPrice}}</text>
       </view>
     </block>
     <view class="fot">

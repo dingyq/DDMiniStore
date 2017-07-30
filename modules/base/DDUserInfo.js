@@ -35,7 +35,7 @@ let _wxInfo = {
 
 let _shoppingCart = {
     total: 0,
-    list: {}
+    list: []
 };
 
 // endregion
@@ -120,7 +120,6 @@ DDUserInfo.getNickName = function() {
             });
         }
     }
-
     return nick ? nick : '--';
 };
 

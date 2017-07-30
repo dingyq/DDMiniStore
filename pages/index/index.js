@@ -40,7 +40,14 @@ Page({
   },
 
   onShow: function() {
-
+    let list = {};
+    let goodsInCart = DDUserInfo.getShoppingCar().list;
+    for (let i = 0; i < goodsInCart.length; i++) {
+        let goods = goodsInCart[i];
+        list[goods.goodsId] = goods.count;
+    }
+    this.data.cart.list = list;
+    this.countCart();
   },
 
   onHide: function() {

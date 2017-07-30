@@ -3,6 +3,11 @@ var config = require('../../config.js')
 var http = require('../../modules/base/network.js')
 var util = require('../../utils/util.js')
 var sta = require("../../utils/statistics.js");
+const extend = require('../../modules/base/extend.js');
+const DDUserInfo = require('../../modules/base/DDUserInfo.js');
+const mallservice = require('../../modules/mall/mallservice.js');
+
+
 //获取应用实例
 var app = getApp()
 Page({
@@ -20,16 +25,35 @@ Page({
         })
   },
   onShow:function (){
-   sta();
-    var allGoods =  wx.getStorageSync('shoppingcar');
-    var sumPrice = 0;
-    for(var i=0;i< allGoods.length;i++){
-        var price = allGoods[i].price;
-        var count =  allGoods[i].buycount;
-        price = util.accMul(price,count);
-        allGoods[i].pay = price;
-        sumPrice = util.accAdd(sumPrice,price);
+    sta();
+
+    let goodsInCart = DDUserInfo.getShoppingCar().list;
+    let allGoods = [];
+    let sumPrice = 0;
+    for(let i=0; i< goodsInCart.length ;i++) {
+        let goods = mallservice.getGoods(goodsInCart[i].goodsId);
+        goods = extend(goods, goodsInCart[i]);
+        var price = goods.discountPrice;
+        var count =  goods.count;
+        price = util.accMul(price, count);
+        sumPrice = util.accAdd(sumPrice, price);
+        allGoods.push(goods);
     }
+
+    this.setData({
+      allGoods:allGoods,
+      sumPrice:sumPrice
+    });
+
+    // var allGoods =  wx.getStorageSync('shoppingcar');
+    // var sumPrice = 0;
+    // for(var i=0;i< allGoods.length;i++){
+    //     var price = allGoods[i].price;
+    //     var count =  allGoods[i].buycount;
+    //     price = util.accMul(price,count);
+    //     allGoods[i].pay = price;
+    //     sumPrice = util.accAdd(sumPrice,price);
+    // }
     this.setData({ allGoods:allGoods, sumPrice:sumPrice });
     this.getDefaultAddress();
   },
@@ -90,7 +114,7 @@ Page({
         })
   },
   toAddress:function(){
-      wx.navigateTo({url: '/pages/address/index'})
+      wx.navigateTo({url: '/pages/address/address'})
   },
   settlement:function (){
     var that = this;

@@ -8,7 +8,7 @@ const mallservice = require('../../modules/mall/mallservice.js');
 Page({
 
   data: {
-    allGoods:{},
+    allGoods:[],
     sumPrice:0
   },
 
@@ -18,22 +18,6 @@ Page({
 
   onShow:function (){
     sta();
-    this.showAllGoods();
-  },
-
-  settlement:function (){
-    wx.navigateTo({url: '/pages/settlement/index'})
-  },
-
-  jia:function (e){
-    this.jiaj(e,true);
-  },
-
-  jian:function (e){
-    this.jiaj(e,false);
-  },
-
-  showAllGoods:function (){
 
     let goodsInCart = DDUserInfo.getShoppingCar().list;
     let allGoods = [];
@@ -41,13 +25,10 @@ Page({
     for(let i=0; i< goodsInCart.length ;i++) {
         let goods = mallservice.getGoods(goodsInCart[i].goodsId);
         goods = extend(goods, goodsInCart[i]);
-       
         var price = goods.discountPrice;
         var count =  goods.count;
-        console.log(price, count);
         price = util.accMul(price, count);
         sumPrice = util.accAdd(sumPrice, price);
-
         allGoods.push(goods);
     }
 
@@ -57,37 +38,85 @@ Page({
     });
   },
 
+  onHide:function () {
+    let cart = {list: {}};
+    for (let i = 0; i < this.data.allGoods.length; i++) {
+        let goods = this.data.allGoods[i];
+        cart.list[goods.goodsId] = goods.count;
+    }
+    DDUserInfo.updateShoppingCar(cart);
+  },
+
+  bindGoodsAdd: function(event) {
+    this.updateCart(event, true);
+  },
+
+  bindGoodsMinus: function(event) {
+    this.updateCart(event, false);
+  },
+
+  bindInputChange: function(event) {
+
+  },
+
+  bindInputing: function(event) {
+
+  },
+
+  bindInputFocus: function(event) {
+
+  },
+
+  bindInputBlur: function(event) {
+
+  },
+
+
+  settlement:function (){
+    wx.navigateTo({url: '/pages/settlement/settlement'})
+  },
+
   toDetail:function(e){
       var id = e.currentTarget.dataset.id;
-        wx.redirectTo({
-          url: '../detail/index?id='+id}
+        wx.navigateTo({
+          url: '../detail/detail?id='+id}
         )
   },
 
-  jiaj:function (e,boo){
-    var id = e.currentTarget.dataset.id;
-    var s = 0;
-    var allGoods = this.data.allGoods;
-    for(var i=0;i<allGoods.length;i++){
-        if(allGoods[i].id==id){
-            if(boo){
-                s = allGoods[i].buycount+1;
+  updateCart:function (e, flag){
+    let id = e.currentTarget.dataset.id;
+    let s = 0;
+    for(let i=0;i<this.data.allGoods.length;i++){
+        let goods = this.data.allGoods[i];
+        if(goods.goodsId == id) {
+            if(flag){
+                s = goods.count + 1;
             }else{
-                s = allGoods[i].buycount-1;
+                s = goods.count - 1;
             }
             //最低值不得低于1
-            if(1>s){
-                allGoods.splice(i, 1);
-            }else{
-                allGoods[i].buycount = s;
+            if (1 > s) {
+                this.data.allGoods.splice(i, 1);
+            } else {
+                goods.count = s;
             }
             break;
-          }
+        }
     }
-    wx.setStorageSync('shoppingcar', allGoods);
+    
+    let sumPrice = 0;
+    for(let i = 0;i < this.data.allGoods.length; i ++) {
+        let goods = this.data.allGoods[i];
+        var price = goods.discountPrice;
+        var count =  goods.count;
+        price = util.accMul(price, count);
+        sumPrice = util.accAdd(sumPrice, price);
+    }
+
     this.setData({
-      allGoods:allGoods
+        allGoods:this.data.allGoods,
+        sumPrice: sumPrice,
     });
-    this.showAllGoods();
   }
+
 })
